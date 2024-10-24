@@ -1,0 +1,39 @@
+name: Run deploy - Staging
+
+on:
+    pull_request:
+        branches: [ 'release/*' ]
+        
+jobs:
+    run_deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+        
+    build:
+        needs: run_deploy
+        uses: ./.github/workflows/build.yaml
+        secrets: inherit
+    tests:
+        needs: run_deploy
+        uses: ./.github/workflows/unit-test.yaml
+        secrets: inherit
+    converge:
+        needs: run_deploy
+        uses: ./.github/workflows/converge.yaml
+        secrets: inherit
+    deploy_img_container:
+        needs:
+            - build
+            - tests
+            - converge
+        uses: ./.github/workflows/deploy-img-container.yaml
+        secrets: inherit
+    deploy_gitops:
+        needs: deploy_img_container
+        uses: ./.github/workflows/deploy-gitops.yaml
+        secrets: inherit
+    notification:
+        if: always()
+        needs: deploy_gitops
+        uses: ./.github/workflows/notification.yaml

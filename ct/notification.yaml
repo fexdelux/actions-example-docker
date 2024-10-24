@@ -1,0 +1,14 @@
+name: Notification - Telegram
+
+on:
+    workflow_call:
+
+jobs:
+    telegram:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: appleboy/telegram-action@master
+          with:
+            to: ${{ secrets.TELEGRAM_BOT_CHAT_ID }}
+            token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+            

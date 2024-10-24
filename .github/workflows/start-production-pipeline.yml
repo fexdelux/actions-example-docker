@@ -1,0 +1,39 @@
+name: Run deploy - Production
+
+on:
+    pull_request:
+        branches: [ 'main' ]
+
+jobs:
+    run_deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout    
+              uses: actions/checkout@v4
+
+    build:
+        needs: run_deploy
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+
+    deploy_img_container:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+#    deploy_gitops:
+#        needs: deploy_img_container
+#        if: success()
+#        uses: ./.github/workflows/deploy-gitops.yaml
+#        secrets: inherit
+    notification:
+        if: always()
+        needs: deploy_img_container
+        runs-on: ubuntu-latest
+        steps:
+        - uses: appleboy/telegram-action@master
+          with:
+            to: ${{ secrets.TELEGRAM_BOT_CHAT_ID }}
+            token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+            
