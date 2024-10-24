@@ -8,11 +8,11 @@ jobs:
     run_deploy:
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v4
+            - uses: actions/checkout@v4
         
     build:
         needs: run_deploy
-        uses: ./.github/workflows/flows/build-flow.yaml
+        uses: ./.github/workflows/flows/build.yaml
         secrets: inherit
     tests:
         needs: run_deploy
