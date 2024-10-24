@@ -13,18 +13,18 @@ jobs:
 
     build:
         needs: run_deploy
-        uses: ./.github/workflows/flows/build.yaml
+        uses: ./.github/workflows/build.yaml
         secrets: inherit
     deploy_img_container:
         needs: build
-        uses: ./.github/workflows/flows/deploy-img-container.yaml
+        uses: ./.github/workflows/deploy-img-container.yaml
         secrets: inherit
     deploy_gitops:
         needs: deploy_img_container
         if: success()
-        uses: ./.github/workflows/flows/deploy-gitops.yaml
+        uses: ./.github/workflows/deploy-gitops.yaml
         secrets: inherit
     notification:
         if: always()
         needs: deploy_gitops
-        uses: ./.github/workflows/flows/notification.yaml
+        uses: ./.github/workflows/notification.yaml

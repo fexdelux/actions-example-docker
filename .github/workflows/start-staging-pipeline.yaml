@@ -12,28 +12,28 @@ jobs:
         
     build:
         needs: run_deploy
-        uses: ./.github/workflows/flows/build.yaml
+        uses: ./.github/workflows/build.yaml
         secrets: inherit
     tests:
         needs: run_deploy
-        uses: ./.github/workflows/flows/test.yaml
+        uses: ./.github/workflows/test.yaml
         secrets: inherit
     converge:
         needs: run_deploy
-        uses: ./.github/workflows/flows/converge.yaml
+        uses: ./.github/workflows/converge.yaml
         secrets: inherit
     deploy_img_container:
         needs:
             - build
             - tests
             - converge
-        uses: ./.github/workflows/flows/deploy-img-container.yaml
+        uses: ./.github/workflows/deploy-img-container.yaml
         secrets: inherit
     deploy_gitops:
         needs: deploy_img_container
-        uses: ./.github/workflows/flows/deploy-gitops.yaml
+        uses: ./.github/workflows/deploy-gitops.yaml
         secrets: inherit
     notification:
         if: always()
         needs: deploy_gitops
-        uses: ./.github/workflows/flows/notification.yaml
+        uses: ./.github/workflows/notification.yaml
