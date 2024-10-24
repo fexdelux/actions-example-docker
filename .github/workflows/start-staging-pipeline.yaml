@@ -16,7 +16,7 @@ jobs:
         secrets: inherit
     tests:
         needs: run_deploy
-        uses: ./.github/workflows/test.yaml
+        uses: ./.github/workflows/unit-test.yaml
         secrets: inherit
     converge:
         needs: run_deploy
