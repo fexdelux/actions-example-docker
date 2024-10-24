@@ -13,18 +13,27 @@ jobs:
 
     build:
         needs: run_deploy
-        uses: ./.github/workflows/build.yaml
-        secrets: inherit
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+
     deploy_img_container:
         needs: build
-        uses: ./.github/workflows/deploy-img-container.yaml
-        secrets: inherit
-    deploy_gitops:
-        needs: deploy_img_container
-        if: success()
-        uses: ./.github/workflows/deploy-gitops.yaml
-        secrets: inherit
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+#    deploy_gitops:
+#        needs: deploy_img_container
+#        if: success()
+#        uses: ./.github/workflows/deploy-gitops.yaml
+#        secrets: inherit
     notification:
         if: always()
-        needs: deploy_gitops
-        uses: ./.github/workflows/notification.yaml
+        needs: deploy_img_container
+        runs-on: ubuntu-latest
+        steps:
+        - uses: appleboy/telegram-action@master
+          with:
+            to: ${{ secrets.TELEGRAM_BOT_CHAT_ID }}
+            token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+            
