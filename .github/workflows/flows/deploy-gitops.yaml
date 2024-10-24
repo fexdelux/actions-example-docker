@@ -1,0 +1,11 @@
+name: Deploy GitOps
+
+on:
+    workflow_call:
+
+jobs:
+    
+    pre_deploy:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4

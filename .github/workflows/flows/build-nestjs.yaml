@@ -1,0 +1,11 @@
+name: Build Nest.js App
+
+on:
+    workflow_call:
+
+jobs:
+    
+    pre_build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4

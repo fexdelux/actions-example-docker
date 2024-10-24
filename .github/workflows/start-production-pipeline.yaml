@@ -1,0 +1,30 @@
+name: Run deploy - Production
+
+on:
+    pull_request:
+        branches: [ 'main' ]
+
+jobs:
+    run_deploy:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout    
+            uses: actions/checkout@v3
+
+    build:
+        needs: run_deploy
+        uses: ./.github/workflows/flows/build.yaml
+        secrets: inherit
+    deploy_img_container:
+        needs: build
+        uses: ./.github/workflows/flows/deploy-img-container.yaml
+        secrets: inherit
+    deploy_gitops:
+        needs: deploy_img_container
+        if: success()
+        uses: ./.github/workflows/flows/deploy-gitops.yaml
+        secrets: inherit
+    notification:
+        if: always()
+        needs: deploy_gitops
+        uses: ./.github/workflows/flows/notification.yaml

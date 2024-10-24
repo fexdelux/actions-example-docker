@@ -1,0 +1,11 @@
+name: Coverge Code
+
+on:
+    workflow_call:
+
+jobs:
+    
+    tests:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
